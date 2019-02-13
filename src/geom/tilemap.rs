@@ -202,7 +202,7 @@ impl<T: Clone> Tilemap<T> {
         let attempt = slide_x(speed.x.fract(), attempt);
         let attempt = slide_y(speed.y.signum(), attempt);
         let attempt = slide_y(speed.y.fract(), attempt);
-        let returned_speed = Vector::new(if attempt.x == speed.x { attempt.x } else { 0.0 }, if attempt.y == speed.y { attempt.y } else { 0.0 });
+        let returned_speed = Vector::new(if (attempt.x - speed.x).abs() < std::f32::EPSILON { attempt.x } else { 0.0 }, if (attempt.y - speed.y).abs() < std::f32::EPSILON { attempt.y } else { 0.0 });
         (bounds.translate(attempt), returned_speed)
     }
 

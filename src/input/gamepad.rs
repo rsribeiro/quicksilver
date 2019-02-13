@@ -31,7 +31,7 @@ impl Gamepad {
             }
         }
         for axis in GAMEPAD_AXIS_LIST.iter() {
-            if self[*axis] != previous[*axis] {
+            if (self[*axis] - previous[*axis]).abs() < std::f32::EPSILON {
                 events.push(Event::GamepadAxis(self.id(), *axis, self[*axis]));
             }
         }
