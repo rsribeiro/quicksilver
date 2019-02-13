@@ -18,8 +18,9 @@ use std::{
 use {
     rodio::{
         self,
+        Sink,
         decoder::{Decoder, DecoderError},
-        source::{SamplesConverter, Source,Amplify},
+        source::{SamplesConverter, Source, Amplify},
     },
     std::{
         fs::File,
@@ -124,18 +125,24 @@ impl Sound {
     /// The sound clip can be played over itself.
     ///
     /// Future changes in volume will not change the sound emitted by this method.
-    pub fn play(&self) -> Result<()> {
+    pub fn play(&self) -> Result<StopHandle> {
         #[cfg(not(target_arch="wasm32"))] {
             let device = match rodio::default_output_device() {
                 Some(device) => device,
                 None => return Err(SoundError::NoOutputAvailable.into())
             };
-            rodio::play_raw(&device, self.get_source()?);
+            let sink = Sink::new(&device);
+            sink.append(self.get_source()?);
+            StopHandle::new(sink)
         }
-        #[cfg(target_arch="wasm32")] js! {
-            @{&self.sound}.cloneNode().play();
+        #[cfg(target_arch="wasm32")] {
+            let sound: Value = js! {
+                let snd = @{&self.sound}.cloneNode();
+                snd.play();
+                return snd;
+            };
+            StopHandle::new(sound)
         }
-        Ok(())
     }
     
     #[cfg(not(target_arch="wasm32"))]
@@ -220,6 +227,38 @@ impl From<DecoderError> for SoundError {
 impl From<IOError> for SoundError {
     fn from(err: IOError) -> SoundError {
         SoundError::IOError(err)
+    }
+}
+
+/// Stop handle
+pub struct StopHandle {
+    #[cfg(not(target_arch="wasm32"))]
+    sink: Sink,
+    #[cfg(target_arch="wasm32")]
+    sound: Value,
+}
+
+impl StopHandle {
+    #[cfg(not(target_arch="wasm32"))]
+    fn new(sink: Sink) -> Result<StopHandle> {
+        Ok(StopHandle{sink})
+    }
+
+    #[cfg(target_arch="wasm32")]
+    fn new(sound: Value) -> Result<StopHandle> {
+        Ok(StopHandle{sound})
+    }
+
+    /// stops the sound
+    pub fn stop(self) -> Result<()> {
+        #[cfg(not(target_arch="wasm32"))] {
+            self.sink.stop();
+        }
+        #[cfg(target_arch="wasm32")] js! {
+            @{&self.sound}.pause();
+            @{&self.sound}.currentTime = 0;
+        }
+        Ok(())
     }
 }
 
