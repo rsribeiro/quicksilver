@@ -2,6 +2,16 @@
 
 ## In-development
 
+## 0.3.9
+- Fix web mouse positions to be consistent with native behaviour 
+
+## 0.3.8
+
+- Fix web keycodes
+- Add more characters to Event::Typed reporting on web
+- Add `from_rgba` and `from_hex` functions to create colors
+- Fix mouse clicks not registering in Immi
+
 ## 0.3.7
 
 - Fix text rendering failing on immi (it's still not very good)
