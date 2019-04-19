@@ -2,6 +2,9 @@
 
 ## In-development
 
+## 0.3.11
+- Add support for lyon's StrokeTessellator
+
 ## 0.3.10
 - Updated lyon to 0.13
 - Updated gilrs to 0.7, which brings macOS support
