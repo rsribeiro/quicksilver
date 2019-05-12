@@ -12,12 +12,12 @@
 //! ## A quick example
 //! 
 //! Create a rust project and add this line to your `Cargo.toml` file under `[dependencies]`:
-//! 
+//! ```text
 //!     quicksilver = "*"
-//! 
+//! ```
 //! Then replace `src/main.rs` with the following (the contents of quicksilver's examples/draw-geometry.rs):
 //! 
-//! ```rust
+//! ```no_run
 //! // Draw some multi-colored geometry to the screen
 //! extern crate quicksilver;
 //! 
@@ -112,7 +112,7 @@
 //! 
 //! Mobile support would be a future possibility, but likely only through external contributions.
 
-#![doc(html_root_url = "https://docs.rs/quicksilver/0.3.11/quicksilver")]
+#![doc(html_root_url = "https://docs.rs/quicksilver/0.3.12/quicksilver")]
 #![deny(
     bare_trait_objects,
     missing_docs,

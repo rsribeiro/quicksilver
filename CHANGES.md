@@ -2,6 +2,10 @@
 
 ## In-development
 
+## 0.3.12
+- Updated glutin to 0.21
+- Expand the Event::Typed to include punctuation
+
 ## 0.3.11
 - Add support for lyon's StrokeTessellator
 
