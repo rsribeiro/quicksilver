@@ -4,7 +4,6 @@
 [![Crates.io](https://img.shields.io/crates/v/quicksilver.svg)](https://crates.io/crates/quicksilver)
 [![Docs Status](https://docs.rs/quicksilver/badge.svg)](https://docs.rs/quicksilver)
 [![dependency status](https://deps.rs/repo/github/ryanisaacg/quicksilver/status.svg)](https://deps.rs/repo/github/ryanisaacg/quicksilver)
-[![Gitter chat](https://badges.gitter.im/quicksilver-rs/Lobby.svg)](https://gitter.im/quicksilver-rs/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A Rust 2D game framework, for both the Web and Desktop
 
@@ -75,6 +74,7 @@ A good way to get started with Quicksilver is to [read and run the examples](htt
     - [rickyhan](https://github.com/rickyhan): [Kingston Crabfight Simulator](https://github.com/rickyhan/crabs)
     - [robotcaleb](https://github.com/robotcaleb): [Replay](https://robotcaleb.github.io/Replay/)
     - [rsribeiro](https://github.com/rsribeiro/): [Evil Alligator](https://rsribeiro.github.io/website/)
+    - [nycex](https://gitlab.com/nycex): [Axosnake](https://gitlab.com/nycex/axosnake)
 
 Want to add your project? Feel free to open an issue or PR!
 
@@ -110,7 +110,6 @@ font support (via [rusttype](https://github.com/redox-os/rusttype)),
 gamepad support (via [gilrs](https://gitlab.com/gilrs-project/gilrs)), 
 saving (via [serde_json](https://github.com/serde-rs/json)),
 complex shape / svg rendering (via [lyon](https://github.com/nical/lyon)),
-immediate-mode GUIs (via [immi](https://github.com/tomaka/immi)),
 and sounds (via [rodio](https://github.com/tomaka/rodio)). 
 
 Each are enabled by default, but you can [specify which features](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#choosing-features) you actually want to use. 
