@@ -88,7 +88,7 @@ impl Drawable for Circle {
         let trans = Transform::translate(self.center())
             * trans
             * Transform::scale(Vector::ONE * self.radius);
-        let tex_trans = bkg.image().map(|img| img.projection(self.bounding_box()));
+        let tex_trans = bkg.image().map(|img| img.projection(Rectangle::new((-1,-1), (2,2))));
         let offset = mesh.add_positioned_vertices(CIRCLE_POINTS.iter().cloned(), trans, tex_trans, bkg);
         mesh.triangles.extend(iter::repeat(z)
             .take(CIRCLE_POINTS.len() - 1)
