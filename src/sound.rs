@@ -50,7 +50,8 @@ pub struct Sound {
     val: Arc<Vec<u8>>,
     #[cfg(target_arch="wasm32")]
     sound: Value,
-    volume: f32
+    volume: f32,
+    loop_sound: bool
 }
 
 
@@ -86,7 +87,8 @@ impl Sound {
             match (error, ready) {
                 (Ok(false), Ok(4)) => Ok(Async::Ready(Sound {
                     sound: sound.clone(),
-                    volume: 1f32
+                    volume: 1f32,
+                    loop_sound: false
                 })),
                 (Ok(true), _) => Err(wasm_sound_error("Sound file not found or could not load")),
                 (Ok(false), Ok(_)) => Ok(Async::NotReady),
@@ -115,6 +117,13 @@ impl Sound {
         self.volume = volume;
     }
 
+    /// Set looping sound
+    /// 
+    /// If set sound will replay after it is finished.
+    pub fn set_loop_sound(&mut self, loop_sound: bool) {
+        self.loop_sound = loop_sound;
+    }
+
     #[cfg(not(target_arch="wasm32"))]
     fn get_source(&self) -> Result<SamplesConverter<Amplify<Decoder<Cursor<Sound>>>, f32>> {
         Ok(Decoder::new(Cursor::new(self.clone()))?.amplify(self.volume).convert_samples())
@@ -132,12 +141,17 @@ impl Sound {
                 None => return Err(SoundError::NoOutputAvailable.into())
             };
             let sink = Sink::new(&device);
-            sink.append(self.get_source()?);
+            if self.loop_sound {
+                sink.append(self.get_source()?.repeat_infinite());
+            } else {
+                sink.append(self.get_source()?);
+            }            
             StopHandle::new(sink)
         }
         #[cfg(target_arch="wasm32")] {
             let sound: Value = js! {
                 let snd = @{&self.sound}.cloneNode();
+                snd.loop = @{self.loop_sound};
                 snd.play();
                 return snd;
             };
@@ -163,7 +177,8 @@ fn load(path: &Path) -> Result<Sound> {
     let val = Arc::new(bytes);
     let sound = Sound {
         val,
-        volume: 1f32
+        volume: 1f32,
+        loop_sound: false
     };
     Decoder::new(Cursor::new(sound.clone()))?;
     Ok(sound)
